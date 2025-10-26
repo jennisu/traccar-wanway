@@ -33,10 +33,28 @@ public class MotionHandler extends BasePositionHandler {
 
     @Override
     public void onPosition(Position position, Callback callback) {
+
+        final Position lastPosition = cacheManager.getPosition(position.getDeviceId());
+        double speedValue = position.getSpeed();
+
         if (!position.hasAttribute(Position.KEY_MOTION)) {
             double threshold = AttributeUtil.lookup(
                     cacheManager, Keys.EVENT_MOTION_SPEED_THRESHOLD, position.getDeviceId());
-            position.set(Position.KEY_MOTION, position.getSpeed() > threshold);
+
+            if (position.getSpeed() > threshold && lastPosition.getDouble(Position.KEY_DISTANCE) == 0
+                && position.getDouble(Position.KEY_DISTANCE) == 0) {
+
+                if (position.getLongitude() == lastPosition.getLongitude()
+                    && position.getLatitude() == lastPosition.getLatitude()
+                    && position.getCourse() == lastPosition.getCourse()
+                    && position.getDeviceTime().getTime() - position.getFixTime().getTime() >= 30) {
+
+                    speedValue = 0;
+
+                }
+            }
+            position.set(Position.KEY_MOTION, speedValue > threshold);
+            //position.set(Position.KEY_MOTION, position.getSpeed() > threshold);
         }
         callback.processed(false);
     }
