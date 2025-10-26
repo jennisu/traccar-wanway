@@ -56,6 +56,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.traccar.reports.common.TripsConfig;
+import org.traccar.helper.model.AttributeUtil;
 
 @Singleton
 public class ConnectionManager implements BroadcastInterface {
@@ -268,9 +270,30 @@ public class ConnectionManager implements BroadcastInterface {
             }, deviceTimeout, TimeUnit.SECONDS));
         }
 
+        if (!device.getMotionState() && device.getMotionTime() != null && device.getMotionDistance() != 0
+            && device.getMotionStreak()) {
+
+            TripsConfig tripsConfig = new TripsConfig(new AttributeUtil.CacheProvider(cacheManager, deviceId));
+
+            if (time.getTime() - device.getMotionTime().getTime() >= tripsConfig.getMinimalParkingDuration()) {
+                device.setMotionState(false);      //0
+                device.setMotionTime(null);         //null
+                device.setMotionDistance(0);    //0
+                device.setMotionStreak(false);    //0
+
+                Map<Event, Position> events = new HashMap<>();
+                Position lPosition = cacheManager.getPosition(deviceId);
+
+                events.put(new Event(Event.TYPE_DEVICE_STOPPED, lPosition), lPosition);
+                notificationManager.updateEvents(events);
+            }
+        }
+
         try {
             storage.updateObject(device, new Request(
-                    new Columns.Include("status", "lastUpdate"),
+                    //new Columns.Include("status", "lastUpdate"),
+                    new Columns.Include("status", "lastUpdate",
+                        "motionState", "motionTime", "motionDistance", "motionStreak"),
                     new Condition.Equals("id", deviceId)));
         } catch (StorageException e) {
             LOGGER.warn("Update device status error", e);

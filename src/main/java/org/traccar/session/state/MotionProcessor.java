@@ -28,7 +28,7 @@ public final class MotionProcessor {
             MotionState state, Position last, Position position, boolean newState, TripsConfig tripsConfig) {
 
         state.setEvent(null);
-
+        /*
         if (last != null) {
             long oldTime = last.getFixTime().getTime();
             long newTime = position.getFixTime().getTime();
@@ -39,6 +39,7 @@ public final class MotionProcessor {
                 state.setEvent(new Event(Event.TYPE_DEVICE_STOPPED, last));
             }
         }
+        */
 
         boolean oldState = state.getMotionState();
         if (oldState == newState) {
@@ -68,7 +69,8 @@ public final class MotionProcessor {
                 if (generateEvent) {
 
                     String eventType = newState ? Event.TYPE_DEVICE_MOVING : Event.TYPE_DEVICE_STOPPED;
-                    Event event = new Event(eventType, position.getDeviceId());
+                    //Event event = new Event(eventType, position.getDeviceId());
+                    Event event = new Event(eventType, position);
                     event.setPositionId(state.getMotionPositionId());
                     event.setEventTime(state.getMotionTime());
 
