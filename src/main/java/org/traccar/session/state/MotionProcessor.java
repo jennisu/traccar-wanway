@@ -69,8 +69,8 @@ public final class MotionProcessor {
                 if (generateEvent) {
 
                     String eventType = newState ? Event.TYPE_DEVICE_MOVING : Event.TYPE_DEVICE_STOPPED;
-                    //Event event = new Event(eventType, position.getDeviceId());
-                    Event event = new Event(eventType, position);
+                    Event event = new Event(eventType, position.getDeviceId());
+                    //Event event = new Event(eventType, position);
                     event.setPositionId(state.getMotionPositionId());
                     event.setEventTime(state.getMotionTime());
 
