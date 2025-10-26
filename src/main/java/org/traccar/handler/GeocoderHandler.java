@@ -45,10 +45,15 @@ public class GeocoderHandler extends BasePositionHandler {
             if (reuseDistance != 0) {
                 Position lastPosition = cacheManager.getPosition(position.getDeviceId());
                 if (lastPosition != null && lastPosition.getAddress() != null
-                        && position.getDouble(Position.KEY_DISTANCE) <= reuseDistance) {
-                    position.setAddress(lastPosition.getAddress());
-                    callback.processed(false);
-                    return;
+                    && position.getDouble(Position.KEY_DISTANCE) <= reuseDistance) {
+
+                    if (lastPosition.getLatitude() == position.getLatitude()
+                        && lastPosition.getLongitude() == position.getLongitude()) {
+
+                        position.setAddress(lastPosition.getAddress());
+                        callback.processed(false);
+                        return;
+                    }
                 }
             }
 
