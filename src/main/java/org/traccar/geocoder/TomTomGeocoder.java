@@ -58,8 +58,14 @@ public class TomTomGeocoder extends JsonGeocoder {
                 if (location.containsKey("countrySubdivision")) {
                     address.setState(location.getString("countrySubdivision"));
                 }
+                if (location.containsKey("countrySecondarySubdivision")) {
+                    address.setSecondarystate(location.getString("countrySecondarySubdivision"));
+                }
                 if (location.containsKey("country")) {
                     address.setCountry(location.getString("country").toUpperCase());
+                }
+                if (location.containsKey("countryCode")) {
+                    address.setCountrycode(location.getString("countryCode").toUpperCase());
                 }
                 if (location.containsKey("postalCode")) {
                     address.setPostcode(location.getString("postalCode"));

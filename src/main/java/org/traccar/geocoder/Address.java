@@ -37,6 +37,16 @@ public class Address {
         this.country = country;
     }
 
+    private String countrycode;
+
+    public String getCountrycode() {
+        return countrycode;
+    }
+
+    public void setCountrycode(String countrycode) {
+        this.countrycode = countrycode;
+    }
+
     private String state;
 
     public String getState() {
@@ -45,6 +55,16 @@ public class Address {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    private String secondarystate;
+
+    public String getSecondarystate() {
+        return secondarystate;
+    }
+
+    public void setSecondarystate(String secondarystate) {
+        this.secondarystate = secondarystate;
     }
 
     private String district;

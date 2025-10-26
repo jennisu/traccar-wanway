@@ -32,6 +32,11 @@ import java.text.ParsePosition;
  * %h - house
  * %f - formatted address
  *
+ * ++ Add new parameters:
+ *
+ * %y - secondary state (TomTom Geocoder)
+ * %z - country code (TomTom Geocoder)
+ *
  */
 public class AddressFormat extends Format {
 
@@ -68,6 +73,8 @@ public class AddressFormat extends Format {
         result = replace(result, "%r", address.getStreet());
         result = replace(result, "%h", address.getHouse());
         result = replace(result, "%f", address.getFormattedAddress());
+        result = replace(result, "%y", address.getSecondarystate());
+        result = replace(result, "%z", address.getCountrycode());
 
         result = result.replaceAll("^[, ]*", "");
 
